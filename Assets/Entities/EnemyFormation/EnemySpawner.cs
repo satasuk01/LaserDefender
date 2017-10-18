@@ -8,8 +8,7 @@ public class EnemySpawner : MonoBehaviour {
 	void Start () {
 		foreach (Transform child in transform) {
 			GameObject enemy = Instantiate (enemyPrefab,child.transform.position,new Quaternion(0,0,-180,0)) as GameObject; //rotate 180
-			//TODO do this necessary?
-			//enemy.transform.parent= child; //make enemy attached to game Obj.
+			enemy.transform.parent= child; //make enemy attached to game Obj.(Obj will be created under "position" obj.)
 		}
 	}
 	
