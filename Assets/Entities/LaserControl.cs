@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserControl : MonoBehaviour {
-
+	public float damage = 100f;
 	void OnBecameInvisible() { 
 		Destroy(gameObject);
 	}
@@ -13,4 +13,8 @@ public class LaserControl : MonoBehaviour {
 			Destroy(col.gameObject)
 	}
 	*/
+	public float Hit(){
+		Destroy (gameObject);
+		return damage;
+	}
 }
