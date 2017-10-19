@@ -4,8 +4,11 @@ using UnityEngine;
 
 
 public class PlayerController : MonoBehaviour {
+	public GameObject projectile;
 	public float playerSpeed=8.0f;
 	float xmin= -6.2f,xmax=6.2f,padding = 0.5f;
+	public float projectileSpeed;
+	public float fireRate;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictPlayer ();
@@ -18,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKey (KeyCode.RightArrow))
 			MoveRight ();
 		movableSpace ();
+		Shoot ();
 	}
 	void MoveLeft(){
 		//-------------------------------
@@ -42,5 +46,17 @@ public class PlayerController : MonoBehaviour {
 		Vector3 leftBoundary = camera.ViewportToWorldPoint (new Vector3 (0, 0, distance));
 		xmin = leftBoundary.x+padding;
 		xmax = rightBoundary.x-padding;
+	}
+	void Shoot(){
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			InvokeRepeating("DispenseLaser",0.0001f,fireRate);
+		}
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			CancelInvoke ("DispenseLaser");
+		}
+	}
+	void DispenseLaser(){
+			GameObject projectileball =  Instantiate (projectile, transform.position,Quaternion.identity);
+			projectileball.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed,0);
 	}
 }
