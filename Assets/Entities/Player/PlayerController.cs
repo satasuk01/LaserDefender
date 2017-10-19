@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
 	float xmin= -6.2f,xmax=6.2f,padding = 0.5f;
 	public float projectileSpeed;
 	public float fireRate;
+	public float health = 250f;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictPlayer ();
@@ -58,5 +59,16 @@ public class PlayerController : MonoBehaviour {
 	void DispenseLaser(){
 			GameObject projectileball =  Instantiate (projectile, transform.position,Quaternion.identity);
 			projectileball.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed,0);
+	}
+
+	void OnTriggerEnter2D(Collider2D collider){
+		LaserControl projectile = collider.gameObject.GetComponent<LaserControl> ();
+		if (projectile) { //projectile != null
+			Debug.Log("Hit by a projectile");
+			health -= projectile.Hit ();
+			if (health <= 0) {
+				Destroy (gameObject);
+			}
+		}
 	}
 }

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour {
-	public float health;
+	public GameObject projectile;
+	public float health=150f;
+	public float projectileSpeed=10f;
+	public float  shotPerSecond = 0.5f;
 	void OnTriggerEnter2D(Collider2D collider){
 		LaserControl projectile = collider.gameObject.GetComponent<LaserControl> ();
 		if (projectile) { //projectile != null
@@ -13,5 +16,17 @@ public class EnemyBehavior : MonoBehaviour {
 				Destroy (gameObject);
 			}
 		}
+	}
+
+	void Update(){
+		float probability = Time.deltaTime * shotPerSecond;
+		if(Random.value < probability){ 
+			EnemyAttack ();
+		}
+	}
+
+	void EnemyAttack(){
+		GameObject missile = Instantiate (projectile,transform.position,Quaternion.identity);
+		missile.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, -projectileSpeed);
 	}
 }
