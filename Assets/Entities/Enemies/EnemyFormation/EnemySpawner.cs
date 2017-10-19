@@ -20,6 +20,19 @@ public class EnemySpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Move ();
+		if (AllMembersDead ()) {
+			Debug.Log ("Empty enemy");
+		}
+	}
+
+	bool AllMembersDead(){
+		//transform.childCount;
+		foreach (Transform childPosition in transform) {
+			if (childPosition.childCount > 0) {
+				return false;
+			} 
+		}
+		return true;
 	}
 
 	void Move(){
