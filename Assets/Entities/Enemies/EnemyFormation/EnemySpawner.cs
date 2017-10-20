@@ -6,26 +6,31 @@ public class EnemySpawner : MonoBehaviour {
 	public GameObject enemyPrefab;
 	public float width = 10f,height = 5f;
 	public float houndSpeed = 2f;
+	public float spawnDelay = 0.5f;
 	private float xmax,xmin;
 	private bool movingRight = true;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictEnemy ();
-		foreach (Transform child in transform) {
-			GameObject enemy = Instantiate (enemyPrefab,child.transform.position,new Quaternion(0,0,-180,0)) as GameObject; //rotate 180
-			enemy.transform.parent= child; //make enemy attached to game Obj.(Obj will be created under "position" obj.)
-		}
+		SpawnEnemies ();
 	}
-
 	// Update is called once per frame
 	void Update () {
 		Move ();
-		if (AllMembersDead ()) {
+		if (IsAllMembersDead ()) {
 			Debug.Log ("Empty enemy");
+			SpawnEnemies ();
 		}
 	}
-
-	bool AllMembersDead(){
+	Transform NextFreePosition(){
+		foreach (Transform childPosition in transform) {
+			if (childPosition.childCount == 0) {
+				return childPosition.transform;
+			} 
+		}
+		return null;
+	}
+	bool IsAllMembersDead(){
 		//transform.childCount;
 		foreach (Transform childPosition in transform) {
 			if (childPosition.childCount > 0) {
@@ -34,7 +39,21 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		return true;
 	}
-
+	void SpawnEnemies (){
+		/*foreach (Transform child in transform) {
+			GameObject enemy = Instantiate (enemyPrefab,child.transform.position,new Quaternion(0,0,-180,0)) as GameObject; //rotate 180
+			enemy.transform.parent= child; //make enemy attached to game Obj.(Obj will be created under "position" obj.)
+		}*/
+		SpawnUntilFull ();
+	}
+	void SpawnUntilFull(){
+		Transform freePosition = NextFreePosition ();
+		if (freePosition) {
+			GameObject enemy = Instantiate (enemyPrefab, freePosition.position, new Quaternion (0, 0, -180, 0)) as GameObject; //rotate 180
+			enemy.transform.parent = freePosition;
+		}
+		if(NextFreePosition()) Invoke ("SpawnUntilFull", spawnDelay); //Prevent calling enemy all the time
+	}
 	void Move(){
 		if (movingRight) {
 			transform.Translate (Vector3.right * Time.deltaTime * houndSpeed);
@@ -49,12 +68,10 @@ public class EnemySpawner : MonoBehaviour {
 			movingRight = false;
 		}
 	}
-
 	void movableSpace(){ //restrict the hound in the game
 		float newx = Mathf.Clamp (this.transform.position.x, xmin, xmax);
 		this.transform.position = new Vector3 (newx, this.transform.position.y, this.transform.position.z);
 	}
-
 	void CameraRestrictEnemy(){ //restrict player by camera view
 		Camera camera = Camera.main;
 		float distance = transform.position.z - camera.transform.position.z;
@@ -63,9 +80,7 @@ public class EnemySpawner : MonoBehaviour {
 		xmin = leftBoundary.x;
 		xmax = rightBoundary.x;
 	}
-
 	public void OnDrawGizmos(){
 		Gizmos.DrawWireCube (transform.position, new Vector3 (width, height));
 	}
-
 }
