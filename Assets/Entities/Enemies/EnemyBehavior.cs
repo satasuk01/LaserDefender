@@ -8,6 +8,8 @@ public class EnemyBehavior : MonoBehaviour {
 	public float projectileSpeed=10f;
 	public float  shotPerSecond = 0.5f;
 	public int scoreValue = 150;
+	public AudioClip fireSound;
+	public AudioClip deathSound;
 	private ScoreKeeper scoreKeeper;
 	void Start(){
 		scoreKeeper = GameObject.Find ("Score").GetComponent<ScoreKeeper> ();
@@ -18,6 +20,7 @@ public class EnemyBehavior : MonoBehaviour {
 			Debug.Log("Hit by a projectile");
 			health -= projectile.Hit ();
 			if (health <= 0) {
+				AudioSource.PlayClipAtPoint (deathSound, transform.position,1f);
 				Destroy (gameObject);
 				scoreKeeper.Score (scoreValue);
 			}
@@ -34,5 +37,6 @@ public class EnemyBehavior : MonoBehaviour {
 	void EnemyAttack(){
 		GameObject missile = Instantiate (projectile,transform.position,Quaternion.identity);
 		missile.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, -projectileSpeed);
+		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
 	}
 }

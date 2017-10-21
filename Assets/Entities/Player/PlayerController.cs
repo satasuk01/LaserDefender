@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
 	public float projectileSpeed;
 	public float fireRate;
 	public float health = 250f;
-
+	public AudioClip fireSound;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictPlayer ();
@@ -59,8 +59,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void DispenseLaser(){
-			GameObject projectileball =  Instantiate (projectile, transform.position,Quaternion.identity);
-			projectileball.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed,0);
+		GameObject projectileball =  Instantiate (projectile, transform.position,Quaternion.identity);
+		projectileball.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed,0);
+		AudioSource.PlayClipAtPoint (fireSound,transform.position,0.5f);
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
