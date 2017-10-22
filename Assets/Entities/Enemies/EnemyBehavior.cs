@@ -31,7 +31,7 @@ public class EnemyBehavior : MonoBehaviour {
 	}
 
 	void Update(){
-		float probability = Time.deltaTime * shotPerSecond;
+		float probability = Time.deltaTime * ((float)shotPerSecond+(FindObjectOfType<EnemySpawner>().cycle)*0.3f);
 		if(Random.value < probability){ 
 			EnemyAttack ();
 			if (isBoss == true)

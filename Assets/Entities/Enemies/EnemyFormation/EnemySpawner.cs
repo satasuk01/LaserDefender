@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour {
 	private bool movingRight = true;
 	public bool enableSpawn = true;
 	public int scoreWhenCall = 1500;
+	public int cycle=1;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictEnemy ();
@@ -27,9 +28,10 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	void BossIncoming(){
-		if (ScoreKeeper.score == scoreWhenCall) {
+		if (ScoreKeeper.score == scoreWhenCall*cycle) {
 			enableSpawn = false;
 			FindObjectOfType<BossSpawner> ().enableSpawn=true;
+			cycle += 2;
 		}
 	}
 
