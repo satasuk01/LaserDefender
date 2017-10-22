@@ -10,14 +10,14 @@ public class MusicManager : MonoBehaviour {
 	void Awake(){
 		Debug.Log ("Awake");
 		activeScene = SceneManager.GetActiveScene ();
-		if (activeScene.name == "Start" && !GameObject.Find ("musicPlayer").GetComponent<AudioSource> ().isPlaying) {
+		if (activeScene.name == "Start") {
 			GameObject.Find("musicPlayer").GetComponent<musicPlayer>().PlayClip(start);
-		}if (activeScene.name == "Game" && !GameObject.Find ("musicPlayer").GetComponent<AudioSource> ().isPlaying) {
+		}if (activeScene.name == "Game" && GameObject.Find ("musicPlayer").GetComponent<AudioSource> ().isPlaying) {
 			GameObject.Find("musicPlayer").GetComponent<musicPlayer>().PlayClip(game);
-		}
+		}/*
 		if (activeScene.name == "EndGame" && !GameObject.Find ("musicPlayer").GetComponent<AudioSource> ().isPlaying) {
 			GameObject.Find("musicPlayer").GetComponent<musicPlayer>().PlayClip(game);
-		}
+		}*/
 	}
 
 }
