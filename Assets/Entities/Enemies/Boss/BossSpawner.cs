@@ -2,37 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour {
+public class BossSpawner : MonoBehaviour {
 	public GameObject enemyPrefab;
 	public float width = 10f,height = 5f;
 	public float houndSpeed = 2f;
 	public float spawnDelay = 0.5f;
 	private float xmax,xmin;
 	private bool movingRight = true;
-	public bool enableSpawn = true;
-	public int scoreWhenCall = 1500;
+	public bool enableSpawn = false;
 	// Use this for initialization
 	void Start () {
 		CameraRestrictEnemy ();
-		SpawnEnemies ();
 	}
 	// Update is called once per frame
 	void Update () {
 		Move ();
-		if (IsAllMembersDead ()) {
-			Debug.Log ("Empty enemy");
+		if (IsAllMembersDead ()&&enableSpawn == false) { //When the boss die 
+			FindObjectOfType<EnemySpawner> ().enableSpawn = true;
+		}
+		if (enableSpawn == true) { //Spawn
 			SpawnEnemies ();
-		}
-		BossIncoming (); //call the boss when score beat
-	}
-
-	void BossIncoming(){
-		if (ScoreKeeper.score == scoreWhenCall) {
 			enableSpawn = false;
-			FindObjectOfType<BossSpawner> ().enableSpawn=true;
 		}
 	}
-
 	Transform NextFreePosition(){
 		foreach (Transform childPosition in transform) {
 			if (childPosition.childCount == 0) {
@@ -51,11 +43,10 @@ public class EnemySpawner : MonoBehaviour {
 		return true;
 	}
 	void SpawnEnemies (){
-		/*foreach (Transform child in transform) {
-			GameObject enemy = Instantiate (enemyPrefab,child.transform.position,new Quaternion(0,0,-180,0)) as GameObject; //rotate 180
-			enemy.transform.parent= child; //make enemy attached to game Obj.(Obj will be created under "position" obj.)
-		}*/
-		if(enableSpawn)SpawnUntilFull ();
+		if (enableSpawn) {
+			SpawnUntilFull ();
+			FindObjectOfType<EnemySpawner> ().enableSpawn = false;
+		}
 	}
 	void SpawnUntilFull(){
 		Transform freePosition = NextFreePosition ();

@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour {
 	public GameObject projectile;
+	public GameObject bossProjectile;
 	public float health=150f;
 	public float projectileSpeed=10f;
 	public float  shotPerSecond = 0.5f;
 	public int scoreValue = 150;
 	public AudioClip fireSound;
 	public AudioClip deathSound;
+	public bool isBoss = false;
+	public bool spawnEnable = true;
 	private ScoreKeeper scoreKeeper;
 	void Start(){
 		scoreKeeper = GameObject.Find ("Score").GetComponent<ScoreKeeper> ();
@@ -31,12 +34,26 @@ public class EnemyBehavior : MonoBehaviour {
 		float probability = Time.deltaTime * shotPerSecond;
 		if(Random.value < probability){ 
 			EnemyAttack ();
+			if (isBoss == true)
+				BossAttack ();
 		}
+
 	}
 
 	void EnemyAttack(){
 		GameObject missile = Instantiate (projectile,transform.position,Quaternion.identity);
 		missile.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, -projectileSpeed);
+		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
+	}
+	void BossAttack(){
+		GameObject energyBall = Instantiate (bossProjectile,transform.position,Quaternion.identity);
+		energyBall.GetComponent<Rigidbody2D> ().velocity = new Vector2 (1.5f, -projectileSpeed*0.7f);
+		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
+		GameObject energyBall2 = Instantiate (bossProjectile,transform.position,Quaternion.identity);
+		energyBall2.GetComponent<Rigidbody2D> ().velocity = new Vector2 (-1.5f, -projectileSpeed*0.7f);
+		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
+		GameObject energyBall3 = Instantiate (bossProjectile,transform.position,Quaternion.identity);
+		energyBall3.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, -projectileSpeed*0.7f);
 		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
 	}
 }
