@@ -13,6 +13,7 @@ public class EnemyBehavior : MonoBehaviour {
 	public AudioClip deathSound;
 	public bool isBoss = false;
 	public bool spawnEnable = true;
+	public GameObject smokeWhenDie;
 	private ScoreKeeper scoreKeeper;
 	void Start(){
 		scoreKeeper = GameObject.Find ("Score").GetComponent<ScoreKeeper> ();
@@ -24,6 +25,7 @@ public class EnemyBehavior : MonoBehaviour {
 			health -= projectile.Hit ();
 			if (health <= 0) {
 				AudioSource.PlayClipAtPoint (deathSound, transform.position,1f);
+				SmokeWhenDie ();
 				Destroy (gameObject);
 				scoreKeeper.Score (scoreValue);
 			}
@@ -55,5 +57,8 @@ public class EnemyBehavior : MonoBehaviour {
 		GameObject energyBall3 = Instantiate (bossProjectile,transform.position,Quaternion.identity);
 		energyBall3.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, -projectileSpeed*0.7f);
 		AudioSource.PlayClipAtPoint (fireSound, transform.position,0.05f);
+	}
+	void SmokeWhenDie(){
+		GameObject smokePuff = Instantiate (smokeWhenDie, transform.position, Quaternion.identity);
 	}
 }
