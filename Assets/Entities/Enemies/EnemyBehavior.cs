@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour {
 	public GameObject projectile;
 	public GameObject bossProjectile;
-	public float health=150f;
+	public int health=2;
 	public float projectileSpeed=10f;
 	public float  shotPerSecond = 0.5f;
 	public int scoreValue = 150;
